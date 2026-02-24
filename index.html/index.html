@@ -20,7 +20,7 @@
     }
   </script>
   <style>
-    /* ----- প্রিমিয়াম স্টাইল (পূর্বের সব) ----- */
+    /* ----- প্রিমিয়াম রেস্পন্সিভ স্টাইল ----- */
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Noto Sans Bengali',sans-serif; font-size:18px; line-height:1.6; min-height:100vh; background-color:#0a0f1a; }
     .login-bg { position:fixed; top:0; left:0; width:100%; height:100%; background:url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; filter:brightness(0.4) saturate(1.3); z-index:-2; }
@@ -36,51 +36,24 @@
     #loginBox input::placeholder { color:#666; font-size:1rem; }
     #loginBox button { background:linear-gradient(145deg,#0b6b35,#064d26); border:none; border-radius:60px; padding:18px; font-weight:700; font-size:1.3rem; color:white; width:100%; cursor:pointer; transition:0.2s; }
     .login-footer { margin-top:25px; color:#2d3e50; font-size:1rem; }
-    /* স্প্ল্যাশ স্ক্রিন - আরও প্রিমিয়াম */
+    /* স্প্ল্যাশ স্ক্রিন */
     .splash-screen {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      position: fixed; top:0; left:0; width:100%; height:100%;
       background: url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
       filter: brightness(0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      opacity: 0;
-      transition: opacity 1.5s ease;
-      pointer-events: none;
+      display: flex; justify-content: center; align-items: center;
+      z-index: 2000; opacity: 0; transition: opacity 1.5s ease; pointer-events: none;
     }
-    .splash-screen.show {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .splash-screen.show { opacity:1; pointer-events:all; }
     .splash-content {
-      text-align: center;
-      color: white;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.8);
-      background: rgba(0,0,0,0.4);
-      padding: 50px 70px;
-      border-radius: 80px;
-      backdrop-filter: blur(10px);
-      border: 3px solid rgba(255,215,0,0.7);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-      animation: glow 2s infinite alternate;
+      text-align: center; color: white; text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.4); padding: 50px 70px; border-radius: 80px;
+      backdrop-filter: blur(10px); border: 3px solid rgba(255,215,0,0.7);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5); animation: glow 2s infinite alternate;
     }
-    .splash-content h1 {
-      font-size: 4.5rem;
-      margin-bottom: 20px;
-      color: #f5e7c8;
-      letter-spacing: 2px;
-    }
-    .splash-content i {
-      font-size: 6rem;
-      color: #c49b3f;
-      margin-bottom: 20px;
-    }
-    @keyframes glow {
-      from { box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-      to { box-shadow: 0 30px 60px rgba(196,155,63,0.5); }
-    }
+    .splash-content h1 { font-size:4.5rem; margin-bottom:20px; color:#f5e7c8; letter-spacing:2px; }
+    .splash-content i { font-size:6rem; color:#c49b3f; margin-bottom:20px; }
+    @keyframes glow { from { box-shadow:0 20px 40px rgba(0,0,0,0.5); } to { box-shadow:0 30px 60px rgba(196,155,63,0.5); } }
     #app { display:none; }
     h1 { text-align:center; font-weight:700; font-size:2.5rem; margin-bottom:20px; color:#f5e7c8; text-shadow:0 2px 10px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; gap:15px; }
     h1 i { font-size:3rem; }
@@ -106,16 +79,16 @@
     .section-title { font-weight:700; font-size:1.8rem; color:#e4c580; display:flex; align-items:center; gap:12px; border-bottom:3px solid #e4c580; padding-bottom:10px; margin-bottom:25px; }
     .section-title i { font-size:2rem; }
     .section-title .three-dot { margin-left:auto; }
-    .search-wrapper { position:relative; display:flex; gap:15px; background:#1e2f3a; border-radius:60px; padding:6px; margin-bottom:30px; }
-    .search-wrapper input { margin:0; border:none; background:transparent; padding:14px 25px; color:white; font-size:1.1rem; flex:1; }
-    .search-wrapper button { width:auto; padding:14px 35px; margin:0; }
+    .search-wrapper { position:relative; display:flex; gap:15px; background:#1e2f3a; border-radius:60px; padding:6px; margin-bottom:30px; flex-wrap:wrap; }
+    .search-wrapper input { margin:0; border:none; background:transparent; padding:14px 25px; color:white; font-size:1.1rem; flex:1; min-width:200px; }
+    .search-wrapper button { width:auto; padding:14px 35px; margin:0; white-space:nowrap; }
     .autocomplete-dropdown { position:absolute; top:100%; left:0; right:0; background:#1e2f3a; border:1px solid #3f5568; border-radius:20px; margin-top:5px; max-height:200px; overflow-y:auto; z-index:100; display:none; }
     .autocomplete-item { padding:12px 20px; cursor:pointer; color:#e2e8f0; transition:0.2s; }
     .autocomplete-item:hover { background:#2d3f55; color:#e4c580; }
     .member-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px; }
     .member-card { background:#1c2a36; border-radius:28px; padding:22px; border:1px solid #3f5568; color:#e2e8f0; transition:0.2s; box-shadow:0 8px 16px rgba(0,0,0,0.3); }
     .member-card:hover { transform:translateY(-4px); border-color:#c49b3f; box-shadow:0 15px 30px rgba(196,155,63,0.15); }
-    .member-card h4 { color:#e4c580; font-size:1.4rem; border-bottom:1px dashed #5f6f80; padding-bottom:12px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center; }
+    .member-card h4 { color:#e4c580; font-size:1.4rem; border-bottom:1px dashed #5f6f80; padding-bottom:12px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
     .member-card p { font-size:1.1rem; margin:8px 0; }
     .card-actions { display:flex; gap:8px; }
     .action-btn { background:transparent; border:none; color:#c49b3f; font-size:1.3rem; cursor:pointer; width:40px; height:40px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; transition:0.2s; }
@@ -151,9 +124,9 @@
     .detail-item { display:flex; justify-content:space-between; align-items:center; background:#0f1a24; padding:10px 15px; border-radius:40px; margin-bottom:8px; }
     .detail-item span { font-size:1.1rem; }
     .detail-item .actions { display:flex; gap:5px; }
-    .detail-add-form { display:flex; gap:10px; margin-top:15px; }
-    .detail-add-form input { flex:1; margin:0; }
-    .detail-add-form button { width:auto; padding:14px 25px; margin:0; }
+    .detail-add-form { display:flex; gap:10px; margin-top:15px; flex-wrap:wrap; }
+    .detail-add-form input { flex:1; min-width:150px; margin:0; }
+    .detail-add-form button { width:auto; padding:14px 25px; margin:0; white-space:nowrap; }
     .close-modal { background:#8b0000; margin-top:20px; }
     .credit-card { text-align:center; margin-top:30px; padding:15px 10px; border-top:1px solid #c49b3f30; font-size:1.1rem; }
     .credit-card .credit-trigger { display:inline-block; background:rgba(196,155,63,0.1); padding:8px 20px; border-radius:40px; color:#e4c580; cursor:pointer; transition:0.2s; border:1px solid #c49b3f30; }
@@ -175,7 +148,27 @@
     .slide-img { width:100%; display:none; aspect-ratio:16/9; object-fit:cover; }
     .active-slide { display:block; }
     .footer-note { text-align:center; color:#e4c580; margin-top:40px; font-size:1.1rem; }
-    @media (max-width:600px) { body { font-size:16px; } h1 { font-size:2rem; } .grid { grid-template-columns:1fr; } .search-wrapper { flex-wrap:wrap; } .search-wrapper button { width:100%; } #loginBox { padding:30px 20px; } .action-btn { width:36px; height:36px; } .project-name-btn { font-size:1.1rem; } .splash-content h1 { font-size:2.5rem; } }
+    /* মোবাইল ফ্রেন্ডলি অ্যাডজাস্টমেন্ট */
+    @media (max-width:600px) {
+      body { font-size:16px; }
+      h1 { font-size:2rem; }
+      .grid { grid-template-columns:1fr; }
+      .search-wrapper button { width:100%; }
+      #loginBox { padding:30px 20px; }
+      .action-btn { width:36px; height:36px; }
+      .project-name-btn { font-size:1.1rem; }
+      .splash-content h1 { font-size:2.5rem; }
+      .splash-content { padding:30px 20px; }
+      .data-table, .work-table { font-size:0.9rem; }
+      .data-table th, .work-table th { font-size:1rem; padding:10px; }
+      .data-table td, .work-table td { padding:8px; }
+      .member-card { padding:15px; }
+      .detail-modal-content { padding:20px; }
+    }
+    /* ট্যাবলেটের জন্য */
+    @media (min-width:601px) and (max-width:900px) {
+      .grid { grid-template-columns:repeat(2,1fr); }
+    }
   </style>
 </head>
 <body>
@@ -273,7 +266,7 @@
             <span class="three-dot" onclick="toggleIncomeCategoryGrid()">⋮</span>
           </div>
           <div id="incomeCategoryGrid" class="category-grid hidden"></div>
-          <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap:wrap;">
             <input type="text" id="newIncomeCategory" placeholder="নতুন খাতের নাম">
             <button onclick="addIncomeCategory()" style="width: auto;"><i class="fas fa-plus"></i> যোগ</button>
           </div>
@@ -284,7 +277,7 @@
             <span class="three-dot" onclick="toggleExpenseCategoryGrid()">⋮</span>
           </div>
           <div id="expenseCategoryGrid" class="category-grid hidden"></div>
-          <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap:wrap;">
             <input type="text" id="newExpenseCategory" placeholder="নতুন খাতের নাম">
             <button onclick="addExpenseCategory()" style="width: auto;"><i class="fas fa-plus"></i> যোগ</button>
           </div>
@@ -449,6 +442,7 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  // মোবাইলের জন্য persistence (inMemoryPersistence মানে পেজ রিফ্রেশে লগআউট, ভালো)
   await setPersistence(auth, inMemoryPersistence);
 
   // ---------- DOM এলিমেন্ট ----------
@@ -509,8 +503,10 @@
     if (!email || !pass) { alert('ইমেইল ও পাসওয়ার্ড দিন'); return; }
     try {
       const userCred = await signInWithEmailAndPassword(auth, email, pass);
+      // onAuthStateChanged automatically detects, but we call to show splash etc.
       showAppAfterLogin(userCred.user);
     } catch (err) {
+      console.error('Login error:', err);
       alert('লগইন ব্যর্থ: ' + err.message);
     }
   };
@@ -520,8 +516,11 @@
   };
 
   auth.onAuthStateChanged((user) => {
-    if (user) showAppAfterLogin(user);
-    else showLoginOnly();
+    if (user) {
+      showAppAfterLogin(user);
+    } else {
+      showLoginOnly();
+    }
   });
 
   // ---------- ড্যাশবোর্ড লোড ----------
@@ -537,7 +536,7 @@
         loadAllMembers()
       ]);
     } catch (e) {
-      console.error(e);
+      console.error('Dashboard load error:', e);
       alert('ডাটা লোড করতে সমস্যা। Firestore ঠিক আছে কিনা দেখুন।');
     } finally {
       spinner.style.display = 'none';
