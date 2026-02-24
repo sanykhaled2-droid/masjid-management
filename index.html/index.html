@@ -20,7 +20,7 @@
     }
   </script>
   <style>
-    /* ----- প্রিমিয়াম রেস্পন্সিভ স্টাইল ----- */
+    /* ----- পুরো স্টাইল আগের মতোই (সংক্ষেপে) ----- */
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Noto Sans Bengali',sans-serif; font-size:18px; line-height:1.6; min-height:100vh; background-color:#0a0f1a; }
     .login-bg { position:fixed; top:0; left:0; width:100%; height:100%; background:url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; filter:brightness(0.4) saturate(1.3); z-index:-2; }
@@ -36,21 +36,9 @@
     #loginBox input::placeholder { color:#666; font-size:1rem; }
     #loginBox button { background:linear-gradient(145deg,#0b6b35,#064d26); border:none; border-radius:60px; padding:18px; font-weight:700; font-size:1.3rem; color:white; width:100%; cursor:pointer; transition:0.2s; }
     .login-footer { margin-top:25px; color:#2d3e50; font-size:1rem; }
-    /* স্প্ল্যাশ স্ক্রিন */
-    .splash-screen {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
-      filter: brightness(0.7);
-      display: flex; justify-content: center; align-items: center;
-      z-index: 2000; opacity: 0; transition: opacity 1.5s ease; pointer-events: none;
-    }
+    .splash-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; filter:brightness(0.7); display:flex; justify-content:center; align-items:center; z-index:2000; opacity:0; transition:opacity 1.5s ease; pointer-events:none; }
     .splash-screen.show { opacity:1; pointer-events:all; }
-    .splash-content {
-      text-align: center; color: white; text-shadow: 0 4px 20px rgba(0,0,0,0.8);
-      background: rgba(0,0,0,0.4); padding: 50px 70px; border-radius: 80px;
-      backdrop-filter: blur(10px); border: 3px solid rgba(255,215,0,0.7);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5); animation: glow 2s infinite alternate;
-    }
+    .splash-content { text-align:center; color:white; text-shadow:0 4px 20px rgba(0,0,0,0.8); background:rgba(0,0,0,0.4); padding:50px 70px; border-radius:80px; backdrop-filter:blur(10px); border:3px solid rgba(255,215,0,0.7); box-shadow:0 20px 40px rgba(0,0,0,0.5); animation:glow 2s infinite alternate; }
     .splash-content h1 { font-size:4.5rem; margin-bottom:20px; color:#f5e7c8; letter-spacing:2px; }
     .splash-content i { font-size:6rem; color:#c49b3f; margin-bottom:20px; }
     @keyframes glow { from { box-shadow:0 20px 40px rgba(0,0,0,0.5); } to { box-shadow:0 30px 60px rgba(196,155,63,0.5); } }
@@ -148,34 +136,15 @@
     .slide-img { width:100%; display:none; aspect-ratio:16/9; object-fit:cover; }
     .active-slide { display:block; }
     .footer-note { text-align:center; color:#e4c580; margin-top:40px; font-size:1.1rem; }
-    /* মোবাইল ফ্রেন্ডলি অ্যাডজাস্টমেন্ট */
-    @media (max-width:600px) {
-      body { font-size:16px; }
-      h1 { font-size:2rem; }
-      .grid { grid-template-columns:1fr; }
-      .search-wrapper button { width:100%; }
-      #loginBox { padding:30px 20px; }
-      .action-btn { width:36px; height:36px; }
-      .project-name-btn { font-size:1.1rem; }
-      .splash-content h1 { font-size:2.5rem; }
-      .splash-content { padding:30px 20px; }
-      .data-table, .work-table { font-size:0.9rem; }
-      .data-table th, .work-table th { font-size:1rem; padding:10px; }
-      .data-table td, .work-table td { padding:8px; }
-      .member-card { padding:15px; }
-      .detail-modal-content { padding:20px; }
-    }
-    /* ট্যাবলেটের জন্য */
-    @media (min-width:601px) and (max-width:900px) {
-      .grid { grid-template-columns:repeat(2,1fr); }
-    }
+    @media (max-width:600px) { body { font-size:16px; } h1 { font-size:2rem; } .grid { grid-template-columns:1fr; } .search-wrapper button { width:100%; } #loginBox { padding:30px 20px; } .action-btn { width:36px; height:36px; } .project-name-btn { font-size:1.1rem; } .splash-content h1 { font-size:2.5rem; } .splash-content { padding:30px 20px; } .data-table, .work-table { font-size:0.9rem; } .data-table th, .work-table th { font-size:1rem; padding:10px; } .data-table td, .work-table td { padding:8px; } .member-card { padding:15px; } .detail-modal-content { padding:20px; } }
+    @media (min-width:601px) and (max-width:900px) { .grid { grid-template-columns:repeat(2,1fr); } }
   </style>
 </head>
 <body>
 <div id="bgLogin" class="login-bg"></div>
 <div id="bgApp" class="app-bg" style="display: none;"></div>
 
-<!-- স্প্ল্যাশ স্ক্রিন (প্রিমিয়াম) -->
+<!-- স্প্ল্যাশ স্ক্রিন -->
 <div id="splashScreen" class="splash-screen">
   <div class="splash-content">
     <i class="fas fa-mosque"></i>
@@ -187,7 +156,7 @@
   <div class="container">
     <h1><i class="fas fa-mosque"></i> বাইতুল হামদ জামে মসজিদ <i class="fas fa-star"></i></h1>
 
-    <!-- লগইন বক্স (সম্পূর্ণ ফাঁকা) -->
+    <!-- লগইন বক্স -->
     <div id="loginBox" class="login-wrapper">
       <div style="width: 100%;">
         <div class="mosque-icon"><i class="fas fa-kaaba"></i></div>
@@ -244,7 +213,7 @@
         </div>
         <div id="memberListContainer" class="member-grid"></div>
 
-        <!-- অ্যাডমিন-শুধু অংশ: নতুন সদস্য যুক্ত / সংশোধন -->
+        <!-- অ্যাডমিন-শুধু অংশ -->
         <div id="adminMemberForm" class="admin-only" style="display: none;">
           <hr style="margin: 30px 0; border-color: #2f4050;">
           <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-user-plus"></i> সদস্য যুক্ত / সংশোধন</div>
@@ -411,7 +380,7 @@
 
       <button class="logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
 
-      <!-- ক্রেডিট ট্রিগার (সবার জন্য) -->
+      <!-- ক্রেডিট ট্রিগার -->
       <div class="credit-card">
         <span class="credit-trigger" onclick="openCreditModal()">
           <i class="fas fa-heart" style="color: #f87171;"></i> khaled sany
@@ -423,7 +392,7 @@
 </div> <!-- overlay -->
 
 <script type="module">
-  // ---------- ফায়ারবেস কনফিগারেশন (আপনার আসল মান) ----------
+  // ---------- ফায়ারবেস কনফিগারেশন ----------
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, inMemoryPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { getFirestore, collection, addDoc, setDoc, doc, getDocs, query, where, deleteDoc, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -442,7 +411,6 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // মোবাইলের জন্য persistence (inMemoryPersistence মানে পেজ রিফ্রেশে লগআউট, ভালো)
   await setPersistence(auth, inMemoryPersistence);
 
   // ---------- DOM এলিমেন্ট ----------
@@ -503,7 +471,6 @@
     if (!email || !pass) { alert('ইমেইল ও পাসওয়ার্ড দিন'); return; }
     try {
       const userCred = await signInWithEmailAndPassword(auth, email, pass);
-      // onAuthStateChanged automatically detects, but we call to show splash etc.
       showAppAfterLogin(userCred.user);
     } catch (err) {
       console.error('Login error:', err);
@@ -1245,7 +1212,7 @@
     document.getElementById('cancelMemberBtn').style.display = 'none';
   };
 
-  // ---------- টগল ডিটেলস (মোট আয়/ব্যয়ের নিচে) ----------
+  // ---------- টগল ডিটেলস ----------
   window.toggleIncomeDetails = () => {
     const el = document.getElementById('incomeDetails');
     el.style.display = el.style.display === 'none' ? 'block' : 'none';
