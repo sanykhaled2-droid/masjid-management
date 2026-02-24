@@ -20,7 +20,7 @@
     }
   </script>
   <style>
-    /* ----- আপনার পূর্বের সব স্টাইল একই থাকবে (সংক্ষেপে দিলাম) ----- */
+    /* ----- প্রিমিয়াম স্টাইল (পূর্বের সব) ----- */
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Noto Sans Bengali',sans-serif; font-size:18px; line-height:1.6; min-height:100vh; background-color:#0a0f1a; }
     .login-bg { position:fixed; top:0; left:0; width:100%; height:100%; background:url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; filter:brightness(0.4) saturate(1.3); z-index:-2; }
@@ -36,12 +36,51 @@
     #loginBox input::placeholder { color:#666; font-size:1rem; }
     #loginBox button { background:linear-gradient(145deg,#0b6b35,#064d26); border:none; border-radius:60px; padding:18px; font-weight:700; font-size:1.3rem; color:white; width:100%; cursor:pointer; transition:0.2s; }
     .login-footer { margin-top:25px; color:#2d3e50; font-size:1rem; }
-    .splash-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; filter:brightness(0.7); display:flex; justify-content:center; align-items:center; z-index:2000; opacity:0; transition:opacity 1.5s ease; pointer-events:none; }
-    .splash-screen.show { opacity:1; pointer-events:all; }
-    .splash-content { text-align:center; color:white; text-shadow:0 4px 20px rgba(0,0,0,0.8); background:rgba(0,0,0,0.4); padding:50px 70px; border-radius:80px; backdrop-filter:blur(10px); border:3px solid rgba(255,215,0,0.7); box-shadow:0 20px 40px rgba(0,0,0,0.5); animation:glow 2s infinite alternate; }
-    .splash-content h1 { font-size:4.5rem; margin-bottom:20px; color:#f5e7c8; letter-spacing:2px; }
-    .splash-content i { font-size:6rem; color:#c49b3f; margin-bottom:20px; }
-    @keyframes glow { from { box-shadow:0 20px 40px rgba(0,0,0,0.5); } to { box-shadow:0 30px 60px rgba(196,155,63,0.5); } }
+    /* স্প্ল্যাশ স্ক্রিন - আরও প্রিমিয়াম */
+    .splash-screen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+      filter: brightness(0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      pointer-events: none;
+    }
+    .splash-screen.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .splash-content {
+      text-align: center;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.4);
+      padding: 50px 70px;
+      border-radius: 80px;
+      backdrop-filter: blur(10px);
+      border: 3px solid rgba(255,215,0,0.7);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      animation: glow 2s infinite alternate;
+    }
+    .splash-content h1 {
+      font-size: 4.5rem;
+      margin-bottom: 20px;
+      color: #f5e7c8;
+      letter-spacing: 2px;
+    }
+    .splash-content i {
+      font-size: 6rem;
+      color: #c49b3f;
+      margin-bottom: 20px;
+    }
+    @keyframes glow {
+      from { box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+      to { box-shadow: 0 30px 60px rgba(196,155,63,0.5); }
+    }
     #app { display:none; }
     h1 { text-align:center; font-weight:700; font-size:2.5rem; margin-bottom:20px; color:#f5e7c8; text-shadow:0 2px 10px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; gap:15px; }
     h1 i { font-size:3rem; }
@@ -143,7 +182,7 @@
 <div id="bgLogin" class="login-bg"></div>
 <div id="bgApp" class="app-bg" style="display: none;"></div>
 
-<!-- স্প্ল্যাশ স্ক্রিন -->
+<!-- স্প্ল্যাশ স্ক্রিন (প্রিমিয়াম) -->
 <div id="splashScreen" class="splash-screen">
   <div class="splash-content">
     <i class="fas fa-mosque"></i>
@@ -202,7 +241,7 @@
         <img src="https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=2070&auto=format&fit=crop" class="slide-img" alt="মসজিদ বাহির">
       </div>
 
-      <!-- সদস্য ব্যবস্থাপনা -->
+      <!-- সদস্য ব্যবস্থাপনা (সবার জন্য) -->
       <div class="card">
         <div class="section-title"><i class="fas fa-users"></i> সদস্য ব্যবস্থাপনা</div>
         <div class="search-wrapper">
@@ -212,7 +251,7 @@
         </div>
         <div id="memberListContainer" class="member-grid"></div>
 
-        <!-- অ্যাডমিন-শুধু অংশ -->
+        <!-- অ্যাডমিন-শুধু অংশ: নতুন সদস্য যুক্ত / সংশোধন -->
         <div id="adminMemberForm" class="admin-only" style="display: none;">
           <hr style="margin: 30px 0; border-color: #2f4050;">
           <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-user-plus"></i> সদস্য যুক্ত / সংশোধন</div>
@@ -226,7 +265,7 @@
         </div>
       </div>
 
-      <!-- আয়ের খাত ও ব্যয়ের খাত (শুধু অ্যাডমিন) -->
+      <!-- আয়ের খাত ও ব্যয়ের খাত (শুধু অ্যাডমিন) - থ্রি-ডট টগল -->
       <div id="adminCategories" class="admin-only" style="display: none;">
         <div class="card">
           <div class="section-title">
@@ -252,16 +291,25 @@
         </div>
       </div>
 
-      <!-- আয়ের তালিকা ও ফর্ম -->
+      <!-- আয়ের তালিকা ও ফর্ম (বিস্তারিত বাটন সহ) -->
       <div class="card">
         <div class="section-title">
           <i class="fas fa-circle-plus" style="color:#a5d6a5;"></i> আয়ের তালিকা
           <span class="three-dot" onclick="toggleTable('incomeTable')">⋮</span>
         </div>
         <table class="data-table hidden" id="incomeTable">
-          <thead><tr><th>বিভাগ</th><th>পরিমাণ</th><th>তারিখ</th><th>অ্যাকশন</th><th>বিস্তারিত</th></tr></thead>
+          <thead>
+            <tr>
+              <th>বিভাগ</th>
+              <th>পরিমাণ</th>
+              <th>তারিখ</th>
+              <th>অ্যাকশন</th>
+              <th>বিস্তারিত</th>
+            </tr>
+          </thead>
           <tbody id="incomeTableBody"></tbody>
         </table>
+        <!-- অ্যাডমিন-শুধু ফর্ম -->
         <div id="adminIncomeForm" class="admin-only" style="display: none;">
           <hr style="margin:20px0; border-color:#2f4050;">
           <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-pen"></i> আয় যোগ / সংশোধন</div>
@@ -274,16 +322,24 @@
         </div>
       </div>
 
-      <!-- ব্যয়ের তালিকা ও ফর্ম -->
+      <!-- ব্যয়ের তালিকা ও ফর্ম (বিস্তারিত বাটন সহ) -->
       <div class="card">
         <div class="section-title">
           <i class="fas fa-circle-minus" style="color:#f9a8a8;"></i> ব্যয়ের তালিকা
           <span class="three-dot" onclick="toggleTable('expenseTable')">⋮</span>
         </div>
         <table class="data-table hidden" id="expenseTable">
-          <thead><tr><th>বিভাগ</th><th>পরিমাণ</th><th>অ্যাকশন</th><th>বিস্তারিত</th></tr></thead>
+          <thead>
+            <tr>
+              <th>বিভাগ</th>
+              <th>পরিমাণ</th>
+              <th>অ্যাকশন</th>
+              <th>বিস্তারিত</th>
+            </tr>
+          </thead>
           <tbody id="expenseTableBody"></tbody>
         </table>
+        <!-- অ্যাডমিন-শুধু ফর্ম -->
         <div id="adminExpenseForm" class="admin-only" style="display: none;">
           <hr style="margin:20px0; border-color:#2f4050;">
           <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-pen"></i> ব্যয় যোগ / সংশোধন</div>
@@ -302,6 +358,7 @@
           <span class="three-dot" onclick="toggleProjectList()">⋮</span>
         </div>
         <div id="projectListContainer" class="project-list hidden"></div>
+        <!-- অ্যাডমিন-শুধু ফর্ম -->
         <div id="adminWorkForm" class="admin-only" style="display: none;">
           <hr style="margin:20px0; border-color:#2f4050;">
           <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-pen"></i> নতুন কাজ যোগ করুন</div>
@@ -318,7 +375,7 @@
         </div>
       </div>
 
-      <!-- বিস্তারিত মডাল -->
+      <!-- বিস্তারিত মডাল (আয়ের জন্য) -->
       <div id="incomeDetailModal" class="detail-modal hidden">
         <div class="detail-modal-content">
           <h3 id="incomeDetailModalTitle">আয়ের বিস্তারিত</h3>
@@ -331,6 +388,8 @@
           <button class="close-modal" onclick="closeIncomeDetailModal()">বন্ধ</button>
         </div>
       </div>
+
+      <!-- বিস্তারিত মডাল (ব্যয়ের জন্য) -->
       <div id="expenseDetailModal" class="detail-modal hidden">
         <div class="detail-modal-content">
           <h3 id="expenseDetailModalTitle">ব্যয়ের বিস্তারিত</h3>
@@ -344,7 +403,7 @@
         </div>
       </div>
 
-      <!-- ক্রেডিট মডাল -->
+      <!-- ক্রেডিট মডাল (খালেদ সানী) -->
       <div id="creditModal" class="credit-modal hidden">
         <div class="credit-modal-content">
           <h2><i class="fas fa-code"></i> ক্রেডিট</h2>
@@ -359,7 +418,7 @@
 
       <button class="logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
 
-      <!-- ক্রেডিট ট্রিগার -->
+      <!-- ক্রেডিট ট্রিগার (সবার জন্য) -->
       <div class="credit-card">
         <span class="credit-trigger" onclick="openCreditModal()">
           <i class="fas fa-heart" style="color: #f87171;"></i> khaled sany
@@ -966,7 +1025,7 @@
   window.openIncomeDetailModal = (incomeId, incomeCategory) => {
     currentIncomeId = incomeId;
     document.getElementById('incomeDetailModalTitle').innerText = `${incomeCategory} - বিস্তারিত`;
-    loadIncomeDetailsModal(incomeId); // ভিন্ন নাম ব্যবহার করছি
+    loadIncomeDetailsModal(incomeId);
     document.getElementById('incomeDetailModal').classList.remove('hidden');
     if (currentUserRole === 'admin') {
       document.getElementById('incomeDetailAddForm').style.display = 'flex';
