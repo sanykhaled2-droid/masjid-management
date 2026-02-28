@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>বাইতুল হামদ জামে মসজিদ | প্রিমিয়াম ম্যানেজমেন্ট</title>
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Firebase SDK (modular) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
+        "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js",
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
+      }
+    }
+  </script>
+  <style>
+    /* ----- সমস্ত স্টাইল অপরিবর্তিত, শুধু টেবিল ও ডিটেইল-অ্যাকশন হাইলাইট করা হয়েছে ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans Bengali', sans-serif;
+      font-size: 18px;
+      line-height: 1.6;
+      min-height: 100vh;
+      background-color: #0a0f1a;
+    }
+
+    /* ব্যাকগ্রাউন্ড */
+    .login-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+      filter: brightness(0.4) saturate(1.3);
+      z-index: -2;
+    }
+
+    .app-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+      filter: brightness(0.25) saturate(1.2);
+      z-index: -2;
+    }
+
+    .overlay {
+      background: rgba(0, 10, 18, 0.85);
+      backdrop-filter: blur(6px);
+      min-height: 100vh;
+      padding: 25px 20px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* লগইন কার্ড */
+    .login-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      width: 100%;
+    }
+
+    #loginBox {
+      max-width: 480px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-radius: 40px;
+      padding: 45px 40px;
+      box-shadow: 0 40px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 215, 0, 0.3);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      text-align: center;
+      color: #000;
+    }
+
+    .mosque-icon {
+      font-size: 5rem;
+      color: #c49b3f;
+      margin-bottom: 15px;
+    }
+
+    #loginBox h2 {
+      color: #0b4f2b;
+      font-weight: 700;
+      font-size: 2.4rem;
+      margin-bottom: 15px;
+    }
+
+    .subtitle {
+      color: #2d3e50;
+      margin-bottom: 30px;
+      border-bottom: 1px dashed #c49b3f;
+      padding-bottom: 15px;
+      font-weight: 500;
+      font-size: 1.2rem;
+    }
+
+    #loginBox input {
+      background: #f5f7fa;
+      border: 1px solid #d4dcec;
+      border-radius: 60px;
+      padding: 18px 24px;
+      margin-bottom: 20px;
+      width: 100%;
+      font-size: 1.1rem;
+      color: #000;
+    }
+
+    #loginBox input::placeholder {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    #loginBox button {
+      background: linear-gradient(145deg, #0b6b35, #064d26);
+      border: none;
+      border-radius: 60px;
+      padding: 18px;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: white;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .login-footer {
+      margin-top: 25px;
+      color: #2d3e50;
+      font-size: 1rem;
+    }
+
+    /* স্প্ল্যাশ স্ক্রিন */
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+      filter: brightness(0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 1s ease;
+      pointer-events: none;
+    }
+    .splash-screen.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .splash-content {
+      text-align: center;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.3);
+      padding: 40px 60px;
+      border-radius: 60px;
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(255,215,0,0.5);
+    }
+    .splash-content h1 {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: #f5e7c8;
+    }
+    .splash-content i {
+      font-size: 5rem;
+      color: #c49b3f;
+    }
+
+    #app {
+      display: none;
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #f5e7c8;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    h1 i {
+      font-size: 3rem;
+    }
+
+    .card {
+      background: rgba(10, 20, 30, 0.9);
+      backdrop-filter: blur(4px);
+      color: #f0f3fa;
+      padding: 28px;
+      border-radius: 32px;
+      margin: 25px 0;
+      box-shadow: 0 25px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,215,0,0.15);
+      border: 1px solid rgba(255,215,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 30px 50px rgba(0,0,0,0.8);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(145deg, #0f2a1a, #071a0e);
+      color: #e6f0e6;
+      padding: 25px 15px;
+      border-radius: 28px;
+      text-align: center;
+      border: 1px solid #c49b3f60;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      transition: all 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: #c49b3f;
+      box-shadow: 0 15px 30px rgba(196,155,63,0.2);
+    }
+
+    .stat-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .stat-card p {
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+
+    .three-dot {
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.4rem;
+      transition: 0.2s;
+    }
+
+    .three-dot:hover {
+      background: rgba(196,155,63,0.3);
+      transform: scale(1.1);
+    }
+
+    .details {
+      display: none;
+      background: #10222e;
+      padding: 18px;
+      border-radius: 20px;
+      margin-top: 15px;
+      color: #cbd5e0;
+      font-size: 1rem;
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid #c49b3f30;
+    }
+
+    /* ফর্ম এলিমেন্ট */
+    input, select, button {
+      width: 100%;
+      padding: 16px 22px;
+      margin: 12px 0;
+      border-radius: 50px;
+      border: 1px solid #2d3f55;
+      background: #1e2a36;
+      color: white;
+      font-size: 1.1rem;
+      transition: 0.2s;
+    }
+
+    input::placeholder {
+      color: #a0b0c0;
+    }
+
+    input:focus, select:focus {
+      border-color: #c49b3f;
+      box-shadow: 0 0 0 3px rgba(196,155,63,0.3);
+      outline: none;
+    }
+
+    button {
+      background: linear-gradient(145deg, #0b6b35, #0a4f2a);
+      color: white;
+      font-weight: 600;
+      border: none;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.5);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: linear-gradient(145deg, #0d7e3f, #0b6b35);
+      transform: scale(1.02);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6);
+    }
+
+    button i {
+      margin-right: 10px;
+    }
+
+    .logout {
+      background: linear-gradient(145deg, #8b0000, #5a0000);
+    }
+
+    .logout:hover {
+      background: linear-gradient(145deg, #a00000, #6b0000);
+    }
+
+    .cancel-btn {
+      background: #4a5568;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #e4c580;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 3px solid #e4c580;
+      padding-bottom: 10px;
+      margin-bottom: 25px;
+    }
+
+    .section-title i {
+      font-size: 2rem;
+    }
+
+    .section-title .three-dot {
+      margin-left: auto;
+    }
+
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      gap: 15px;
+      background: #1e2f3a;
+      border-radius: 60px;
+      padding: 6px;
+      margin-bottom: 30px;
+    }
+
+    .search-wrapper input {
+      margin: 0;
+      border: none;
+      background: transparent;
+      padding: 14px 25px;
+      color: white;
+      font-size: 1.1rem;
+      flex: 1;
+    }
+
+    .search-wrapper input:focus {
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .search-wrapper button {
+      width: auto;
+      padding: 14px 35px;
+      margin: 0;
+    }
+
+    .autocomplete-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #1e2f3a;
+      border: 1px solid #3f5568;
+      border-radius: 20px;
+      margin-top: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 100;
+      display: none;
+    }
+    .autocomplete-item {
+      padding: 12px 20px;
+      cursor: pointer;
+      color: #e2e8f0;
+      transition: 0.2s;
+    }
+    .autocomplete-item:hover {
+      background: #2d3f55;
+      color: #e4c580;
+    }
+
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .member-card {
+      background: #1c2a36;
+      border-radius: 28px;
+      padding: 22px;
+      border: 1px solid #3f5568;
+      color: #e2e8f0;
+      transition: 0.2s;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    .member-card:hover {
+      transform: translateY(-4px);
+      border-color: #c49b3f;
+      box-shadow: 0 15px 30px rgba(196,155,63,0.15);
+    }
+
+    .member-card h4 {
+      color: #e4c580;
+      font-size: 1.4rem;
+      border-bottom: 1px dashed #5f6f80;
+      padding-bottom: 12px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .member-card p {
+      font-size: 1.1rem;
+      margin: 8px 0;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      background: transparent;
+      border: none;
+      color: #c49b3f;
+      font-size: 1.3rem;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+
+    .action-btn:hover {
+      background: rgba(196, 155, 63, 0.2);
+      transform: scale(1.1);
+    }
+
+    .delete-btn {
+      color: #f87171;
+    }
+
+    .delete-btn:hover {
+      background: rgba(248, 113, 113, 0.2);
+    }
+
+    .due-highlight {
+      color: #ff9999;
+      font-weight: 600;
+    }
+
+    /* ক্যাটাগরি গ্রিড (শুধু অ্যাডমিন) */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .category-item {
+      background: #1c2a36;
+      border-radius: 20px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #3f5568;
+    }
+    .category-name {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    /* প্রজেক্ট লিস্ট */
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .project-item {
+      background: rgba(30, 47, 58, 0.8);
+      border-radius: 60px;
+      border: 1px solid #3f5568;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .project-item:hover {
+      border-color: #c49b3f;
+      box-shadow: 0 8px 20px rgba(196,155,63,0.2);
+    }
+    .project-name-btn {
+      width: 100%;
+      text-align: left;
+      padding: 18px 28px;
+      background: transparent;
+      border: none;
+      color: #e4c580;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .project-name-btn i {
+      font-size: 1.5rem;
+      color: #c49b3f;
+      transition: transform 0.3s;
+    }
+    .project-name-btn:hover i {
+      transform: translateX(5px);
+    }
+    .project-details {
+      display: none;
+      background: #0f1a24;
+      padding: 20px;
+      border-top: 1px solid #2f4050;
+    }
+    .project-details.show {
+      display: block;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed #2f4050;
+    }
+    .detail-label {
+      color: #a0b0c0;
+    }
+    .detail-value {
+      color: #f0f3fa;
+      font-weight: 600;
+    }
+    .detail-actions {
+      display: flex;
+      justify-content: space-between; /* বাটন দুই পাশে */
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .detail-actions button {
+      width: 48%; /* দুইটি বাটন সমান চওড়া */
+      padding: 12px;
+      font-size: 1rem;
+    }
+    .detail-actions .action-btn {
+      width: auto; /* ওভাররাইড না করার জন্য */
+    }
+
+    /* টেবিল - আরও প্রিমিয়াম লুক */
+    .data-table, .work-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1e2f3a;
+      border-radius: 24px;
+      overflow: hidden;
+      font-size: 1.1rem;
+      margin-top: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .data-table th, .work-table th {
+      background: linear-gradient(145deg, #0b4f2b, #0a3f22);
+      color: #f5e7c8;
+      font-weight: 700;
+      padding: 16px 12px;
+      text-align: center;
+      border-bottom: 2px solid #c49b3f;
+      font-size: 1.2rem;
+    }
+    .data-table td, .work-table td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #2f4050;
+      color: #e0e7ff;
+    }
+    .data-table tbody tr:hover, .work-table tbody tr:hover {
+      background-color: #2d3f55;
+    }
+    .data-table .action-btn {
+      font-size: 1.2rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .admin-only {
+      display: block;
+    }
+    .viewer-only {
+      display: block;
+    }
+
+    .spinner {
+      border: 5px solid rgba(255,215,0,0.1);
+      border-left-color: #c49b3f;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 30px auto;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .slider {
+      padding: 0;
+      border-radius: 40px;
+      overflow: hidden;
+    }
+    .slide-img {
+      width: 100%;
+      display: none;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+    }
+    .active-slide { display: block; }
+
+    .footer-note {
+      text-align: center;
+      color: #e4c580;
+      margin-top: 40px;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 600px) {
+      body { font-size: 16px; }
+      h1 { font-size: 2rem; }
+      .grid { grid-template-columns: 1fr; }
+      .search-wrapper { flex-wrap: wrap; }
+      .search-wrapper button { width: 100%; }
+      #loginBox { padding: 30px 20px; }
+      .action-btn { width: 36px; height: 36px; }
+      .project-name-btn { font-size: 1.1rem; }
+      .splash-content h1 { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="bgLogin" class="login-bg"></div>
+<div id="bgApp" class="app-bg" style="display: none;"></div>
+
+<div id="splashScreen" class="splash-screen">
+  <div class="splash-content">
+    <i class="fas fa-mosque"></i>
+    <h1>বাইতুল হামদ জামে মসজিদে স্বাগতম</h1>
+  </div>
+</div>
+
+<div class="overlay">
+  <div class="container">
+    <h1><i class="fas fa-mosque"></i> বাইতুল হামদ জামে মসজিদ <i class="fas fa-star"></i></h1>
+
+    <!-- লগইন বক্স -->
+    <div id="loginBox" class="login-wrapper">
+      <div style="width: 100%;">
+        <div class="mosque-icon"><i class="fas fa-kaaba"></i></div>
+        <h2><i class="fas fa-lock"></i> অ্যাডমিন লগইন</h2>
+        <div class="subtitle">প্রবেশের জন্য আপনার ইমেইল ও পাসওয়ার্ড দিন</div>
+        <input type="email" id="email" placeholder="ইমেইল" autocomplete="off">
+        <input type="password" id="password" placeholder="পাসওয়ার্ড" autocomplete="off">
+        <button onclick="login()"><i class="fas fa-sign-in-alt"></i> ড্যাশবোর্ডে প্রবেশ</button>
+        <div class="login-footer">
+          <i class="fas fa-shield-alt"></i> শুধুমাত্র অনুমোদিত ইমাম ও সচিব
+        </div>
+      </div>
+    </div>
+
+    <!-- অ্যাপ -->
+    <div id="app">
+      <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+
+      <div class="grid">
+        <div class="stat-card">
+          <h3><i class="fas fa-arrow-down"></i> মোট আয় <span class="three-dot" onclick="toggleIncomeDetails()">⋮</span></h3>
+          <p id="totalIncome">০ টাকা</p>
+          <div id="incomeDetails" class="details"></div>
+        </div>
+        <div class="stat-card">
+          <h3><i class="fas fa-arrow-up"></i> মোট ব্যয় <span class="three-dot" onclick="toggleExpenseDetails()">⋮</span></h3>
+          <p id="totalExpense">০ টাকা</p>
+          <div id="expenseDetails" class="details"></div>
+        </div>
+        <div class="stat-card">
+          <h3><i class="fas fa-scale-balanced"></i> ব্যালেন্স</h3>
+          <p id="balance">০ টাকা</p>
+        </div>
+      </div>
+
+      <!-- চার্ট -->
+      <div class="card">
+        <canvas id="financeChart" style="max-height: 300px; width:100%;"></canvas>
+      </div>
+
+      <div class="slider card">
+        <img src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2070&auto=format&fit=crop" class="slide-img active-slide" alt="মসজিদ">
+        <img src="https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=2070&auto=format&fit=crop" class="slide-img" alt="মসজিদ ভিতর">
+        <img src="https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=2070&auto=format&fit=crop" class="slide-img" alt="মসজিদ বাহির">
+      </div>
+
+      <!-- সদস্য ব্যবস্থাপনা (সবার জন্য) -->
+      <div class="card">
+        <div class="section-title"><i class="fas fa-users"></i> সদস্য ব্যবস্থাপনা</div>
+        <div class="search-wrapper">
+          <input type="text" id="memberSearchInput" placeholder="সদস্যের নাম লিখুন..." onkeyup="handleSearchInput()" onblur="hideAutocomplete()">
+          <button onclick="filterMembers()"><i class="fas fa-search"></i> খুঁজুন</button>
+          <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+        </div>
+        <div id="memberListContainer" class="member-grid"></div>
+
+        <!-- অ্যাডমিন-শুধু অংশ: নতুন সদস্য যুক্ত / সংশোধন -->
+        <div id="adminMemberForm" class="admin-only" style="display: none;">
+          <hr style="margin: 30px 0; border-color: #2f4050;">
+          <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-user-plus"></i> সদস্য যুক্ত / সংশোধন</div>
+          <input id="memberName" placeholder="নাম">
+          <input id="memberYear" type="number" placeholder="বছর (যেমন ২০২৬)">
+          <input id="memberSalary" type="number" placeholder="মাসিক বেতন (টাকা)">
+          <input id="payMonth" placeholder="বেতন মাস (ঐচ্ছিক)">
+          <input type="hidden" id="editingMemberId" value="">
+          <button onclick="addOrUpdateMember()" id="memberSubmitBtn"><i class="fas fa-save"></i> সংরক্ষণ / জমা</button>
+          <button class="cancel-btn" onclick="cancelMemberEdit()" id="cancelMemberBtn" style="display: none;">বাতিল</button>
+        </div>
+      </div>
+
+      <!-- ক্যাটাগরি ম্যানেজমেন্ট (শুধু অ্যাডমিন) -->
+      <div id="adminCategories" class="admin-only" style="display: none;">
+        <div class="card">
+          <div class="section-title"><i class="fas fa-tags" style="color:#a5d6a5;"></i> আয়ের খাত</div>
+          <div id="incomeCategoryList" class="category-grid"></div>
+          <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <input type="text" id="newIncomeCategory" placeholder="নতুন খাতের নাম">
+            <button onclick="addIncomeCategory()" style="width: auto;"><i class="fas fa-plus"></i> যোগ</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title"><i class="fas fa-tags" style="color:#f9a8a8;"></i> ব্যয়ের খাত</div>
+          <div id="expenseCategoryList" class="category-grid"></div>
+          <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <input type="text" id="newExpenseCategory" placeholder="নতুন খাতের নাম">
+            <button onclick="addExpenseCategory()" style="width: auto;"><i class="fas fa-plus"></i> যোগ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- আয়ের তালিকা ও ফর্ম -->
+      <div class="card">
+        <div class="section-title">
+          <i class="fas fa-circle-plus" style="color:#a5d6a5;"></i> আয়ের তালিকা
+          <span class="three-dot" onclick="toggleTable('incomeTable')">⋮</span>
+        </div>
+        <table class="data-table hidden" id="incomeTable">
+          <thead><tr><th>বিভাগ</th><th>পরিমাণ</th><th>তারিখ</th><th>অ্যাকশন</th></tr></thead>
+          <tbody id="incomeTableBody"></tbody>
+        </table>
+        <!-- অ্যাডমিন-শুধু ফর্ম -->
+        <div id="adminIncomeForm" class="admin-only" style="display: none;">
+          <hr style="margin: 20px 0; border-color: #2f4050;">
+          <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-pen"></i> আয় যোগ / সংশোধন</div>
+          <select id="incomeCategorySelect"></select>
+          <input type="number" id="incomeAmount" placeholder="টাকা">
+          <input type="date" id="incomeDate">
+          <input type="hidden" id="editingIncomeId" value="">
+          <button onclick="addIncome()" id="incomeSubmitBtn"><i class="fas fa-plus"></i> আয় যোগ</button>
+          <button class="cancel-btn" onclick="cancelIncomeEdit()" id="cancelIncomeBtn" style="display: none;">বাতিল</button>
+        </div>
+      </div>
+
+      <!-- ব্যয়ের তালিকা ও ফর্ম -->
+      <div class="card">
+        <div class="section-title">
+          <i class="fas fa-circle-minus" style="color:#f9a8a8;"></i> ব্যয়ের তালিকা
+          <span class="three-dot" onclick="toggleTable('expenseTable')">⋮</span>
+        </div>
+        <table class="data-table hidden" id="expenseTable">
+          <thead><tr><th>বিভাগ</th><th>পরিমাণ</th><th>অ্যাকশন</th></tr></thead>
+          <tbody id="expenseTableBody"></tbody>
+        </table>
+        <!-- অ্যাডমিন-শুধু ফর্ম -->
+        <div id="adminExpenseForm" class="admin-only" style="display: none;">
+          <hr style="margin: 20px 0; border-color: #2f4050;">
+          <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-pen"></i> ব্যয় যোগ / সংশোধন</div>
+          <select id="expenseCategorySelect"></select>
+          <input type="number" id="expenseAmount" placeholder="টাকা">
+          <input type="hidden" id="editingExpenseId" value="">
+          <button onclick="addExpense()" id="expenseSubmitBtn"><i class="fas fa-plus"></i> ব্যয় যোগ</button>
+          <button class="cancel-btn" onclick="cancelExpenseEdit()" id="cancelExpenseBtn" style="display: none;">বাতিল</button>
+        </div>
+      </div>
+
+      <!-- প্রকল্প ও কাজ -->
+      <div class="card">
+        <div class="section-title">
+          <i class="fas fa-hammer"></i> প্রকল্প ও কাজ
+          <span class="three-dot" onclick="toggleProjectList()">⋮</span>
+        </div>
+        <div id="projectListContainer" class="project-list hidden"></div>
+        <!-- অ্যাডমিন-শুধু ফর্ম -->
+        <div id="adminWorkForm" class="admin-only" style="display: none;">
+          <hr style="margin: 20px 0; border-color: #2f4050;">
+          <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-pen"></i> নতুন কাজ যোগ করুন</div>
+          <input id="workName" placeholder="কাজের নাম">
+          <input id="workBudget" type="number" placeholder="বাজেট (টাকা)">
+          <select id="workStatus">
+            <option value="ongoing">চলমান</option>
+            <option value="upcoming">আগামী</option>
+            <option value="completed">সম্পন্ন</option>
+          </select>
+          <input type="hidden" id="editingWorkId" value="">
+          <button onclick="addWork()" id="workSubmitBtn"><i class="fas fa-plus"></i> কাজ যোগ</button>
+          <button class="cancel-btn" onclick="cancelWorkEdit()" id="cancelWorkBtn" style="display: none;">বাতিল</button>
+        </div>
+      </div>
+
+      <button class="logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
+    </div> <!-- app -->
+  </div> <!-- container -->
+  <div class="footer-note">🕋 বাইতুল হামদ জামে মসজিদ - প্রিমিয়াম ম্যানেজমেন্ট</div>
+</div> <!-- overlay -->
+
+<script type="module">
+  // ---------- Firebase কনফিগার ----------
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, inMemoryPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, collection, addDoc, setDoc, doc, getDocs, query, where, deleteDoc, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdKl5_qwWboVsR3x8obQ_R-IumB6wzpp8",
+  authDomain: "baitul-hamd-jame-masjid-6ea16.firebaseapp.com",
+  projectId: "baitul-hamd-jame-masjid-6ea16",
+  storageBucket: "baitul-hamd-jame-masjid-6ea16.firebasestorage.app",
+  messagingSenderId: "885014566065",
+  appId: "1:885014566065:web:ba6708013b20a05c2c7e90",
+  measurementId: "G-0BQY74BH19"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  await setPersistence(auth, inMemoryPersistence);
+
+  // DOM এলিমেন্ট
+  const loginBox = document.getElementById('loginBox');
+  const appDiv = document.getElementById('app');
+  const bgLogin = document.getElementById('bgLogin');
+  const bgApp = document.getElementById('bgApp');
+  const spinner = document.getElementById('loadingSpinner');
+  const splash = document.getElementById('splashScreen');
+  let allMembers = [];
+  let incomeCategories = [];
+  let expenseCategories = [];
+  let currentUserRole = null; // 'admin' or 'viewer'
+
+  const searchInput = document.getElementById('memberSearchInput');
+  const autocompleteDropdown = document.getElementById('autocompleteDropdown');
+  const memberContainer = document.getElementById('memberListContainer');
+
+  // টেবিল টগল
+  window.toggleTable = (tableId) => {
+    const table = document.getElementById(tableId);
+    if (table) table.classList.toggle('hidden');
+  };
+
+  window.toggleProjectList = () => {
+    const container = document.getElementById('projectListContainer');
+    if (container) container.classList.toggle('hidden');
+  };
+
+  function showLoginOnly() {
+    loginBox.style.display = 'flex';
+    appDiv.style.display = 'none';
+    bgLogin.style.display = 'block';
+    bgApp.style.display = 'none';
+    splash.classList.remove('show');
+  }
+
+  function showAppAfterLogin(user) {
+    splash.classList.add('show');
+    bgLogin.style.display = 'none';
+    bgApp.style.display = 'block';
+    loginBox.style.display = 'none';
+    
+    setTimeout(() => {
+      splash.classList.remove('show');
+      appDiv.style.display = 'block';
+    }, 2500);
+
+    if (user.email === 'sanykhaled2@gmail.com') {
+      currentUserRole = 'admin';
+      document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+    } else {
+      currentUserRole = 'viewer';
+      document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+    }
+    loadDashboard();
+  }
+
+  window.login = async () => {
+    const email = document.getElementById('email').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    if (!email || !pass) { alert('ইমেইল ও পাসওয়ার্ড দিন'); return; }
+    try {
+      const userCred = await signInWithEmailAndPassword(auth, email, pass);
+      showAppAfterLogin(userCred.user);
+    } catch (err) {
+      alert('লগইন ব্যর্থ: ' + err.message);
+    }
+  };
+
+  window.logout = async () => {
+    await signOut(auth);
+  };
+
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      showAppAfterLogin(user);
+    } else {
+      showLoginOnly();
+    }
+  });
+
+  async function loadDashboard() {
+    spinner.style.display = 'block';
+    try {
+      await Promise.all([
+        loadIncomeCategories(),
+        loadExpenseCategories(),
+        loadIncomeDetails(),
+        loadExpenseDetails(),
+        loadWorks(),
+        loadAllMembers()
+      ]);
+    } catch (e) {
+      console.error(e);
+      alert('ডাটা লোড করতে সমস্যা। Firestore ঠিক আছে কিনা দেখুন।');
+    } finally {
+      spinner.style.display = 'none';
+    }
+  }
+
+  // ---------- ক্যাটাগরি (আয়) ----------
+  async function loadIncomeCategories() {
+    const snap = await getDocs(collection(db, 'incomeCategories'));
+    incomeCategories = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderIncomeCategories();
+    populateIncomeCategorySelect();
+  }
+
+  function renderIncomeCategories() {
+    const container = document.getElementById('incomeCategoryList');
+    if (!container) return;
+    let html = '';
+    incomeCategories.forEach(cat => {
+      html += `<div class="category-item">
+        <span class="category-name">${cat.name}</span>
+        <span class="card-actions">
+          <button class="action-btn" onclick="editIncomeCategory('${cat.id}','${cat.name}')"><i class="fas fa-edit"></i></button>
+          <button class="action-btn delete-btn" onclick="deleteIncomeCategory('${cat.id}','${cat.name}')"><i class="fas fa-trash"></i></button>
+        </span>
+      </div>`;
+    });
+    container.innerHTML = html || '<p>কোন খাত নেই</p>';
+  }
+
+  window.addIncomeCategory = async () => {
+    const name = document.getElementById('newIncomeCategory').value.trim();
+    if (!name) return alert('নাম দিন');
+    await addDoc(collection(db, 'incomeCategories'), { name });
+    document.getElementById('newIncomeCategory').value = '';
+    await loadIncomeCategories();
+  };
+
+  window.editIncomeCategory = (id, oldName) => {
+    const newName = prompt('খাতের নতুন নাম লিখুন', oldName);
+    if (newName && newName !== oldName) {
+      const batch = writeBatch(db);
+      const catRef = doc(db, 'incomeCategories', id);
+      batch.update(catRef, { name: newName });
+
+      getDocs(query(collection(db, 'income'), where('category', '==', oldName)))
+        .then(snap => {
+          snap.docs.forEach(d => batch.update(d.ref, { category: newName }));
+          return batch.commit();
+        })
+        .then(() => {
+          loadIncomeCategories();
+          loadIncomeDetails();
+        });
+    }
+  };
+
+  window.deleteIncomeCategory = async (id, name) => {
+    if (!confirm(`"${name}" খাতটি মুছে ফেললে এই খাতের সব আয়ের এন্ট্রি মুছে যাবে। নিশ্চিত?`)) return;
+    const batch = writeBatch(db);
+    const incomeSnap = await getDocs(query(collection(db, 'income'), where('category', '==', name)));
+    incomeSnap.docs.forEach(d => batch.delete(d.ref));
+    batch.delete(doc(db, 'incomeCategories', id));
+    await batch.commit();
+    await Promise.all([loadIncomeCategories(), loadIncomeDetails()]);
+  };
+
+  function populateIncomeCategorySelect() {
+    const select = document.getElementById('incomeCategorySelect');
+    if (select) select.innerHTML = incomeCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+  }
+
+  // ---------- ক্যাটাগরি (ব্যয়) ----------
+  async function loadExpenseCategories() {
+    const snap = await getDocs(collection(db, 'expenseCategories'));
+    expenseCategories = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderExpenseCategories();
+    populateExpenseCategorySelect();
+  }
+
+  function renderExpenseCategories() {
+    const container = document.getElementById('expenseCategoryList');
+    if (!container) return;
+    let html = '';
+    expenseCategories.forEach(cat => {
+      html += `<div class="category-item">
+        <span class="category-name">${cat.name}</span>
+        <span class="card-actions">
+          <button class="action-btn" onclick="editExpenseCategory('${cat.id}','${cat.name}')"><i class="fas fa-edit"></i></button>
+          <button class="action-btn delete-btn" onclick="deleteExpenseCategory('${cat.id}','${cat.name}')"><i class="fas fa-trash"></i></button>
+        </span>
+      </div>`;
+    });
+    container.innerHTML = html || '<p>কোন খাত নেই</p>';
+  }
+
+  window.addExpenseCategory = async () => {
+    const name = document.getElementById('newExpenseCategory').value.trim();
+    if (!name) return alert('নাম দিন');
+    await addDoc(collection(db, 'expenseCategories'), { name });
+    document.getElementById('newExpenseCategory').value = '';
+    await loadExpenseCategories();
+  };
+
+  window.editExpenseCategory = (id, oldName) => {
+    const newName = prompt('খাতের নতুন নাম লিখুন', oldName);
+    if (newName && newName !== oldName) {
+      const batch = writeBatch(db);
+      const catRef = doc(db, 'expenseCategories', id);
+      batch.update(catRef, { name: newName });
+
+      getDocs(query(collection(db, 'expense'), where('category', '==', oldName)))
+        .then(snap => {
+          snap.docs.forEach(d => batch.update(d.ref, { category: newName }));
+          return batch.commit();
+        })
+        .then(() => {
+          loadExpenseCategories();
+          loadExpenseDetails();
+        });
+    }
+  };
+
+  window.deleteExpenseCategory = async (id, name) => {
+    if (!confirm(`"${name}" খাতটি মুছে ফেললে এই খাতের সব ব্যয়ের এন্ট্রি মুছে যাবে। নিশ্চিত?`)) return;
+    const batch = writeBatch(db);
+    const expenseSnap = await getDocs(query(collection(db, 'expense'), where('category', '==', name)));
+    expenseSnap.docs.forEach(d => batch.delete(d.ref));
+    batch.delete(doc(db, 'expenseCategories', id));
+    await batch.commit();
+    await Promise.all([loadExpenseCategories(), loadExpenseDetails()]);
+  };
+
+  function populateExpenseCategorySelect() {
+    const select = document.getElementById('expenseCategorySelect');
+    if (select) select.innerHTML = expenseCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+  }
+
+  // ---------- আয় ----------
+  async function loadIncomeDetails() {
+    const snap = await getDocs(collection(db, 'income'));
+    let total = 0;
+    let rows = '';
+    let detailsHtml = '';
+    snap.docs.forEach(d => {
+      const data = d.data();
+      total += data.amount || 0;
+      const date = data.date ? new Date(data.date.seconds*1000).toLocaleDateString('bn') : '';
+      const actionButtons = currentUserRole === 'admin' 
+        ? `<button class="action-btn" onclick="editIncome('${d.id}')"><i class="fas fa-edit"></i></button>
+           <button class="action-btn delete-btn" onclick="deleteIncome('${d.id}')"><i class="fas fa-trash"></i></button>`
+        : '';
+      rows += `<tr>
+        <td>${data.category}</td><td>${data.amount} টাকা</td><td>${date}</td>
+        <td>${actionButtons}</td>
+      </tr>`;
+      detailsHtml += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #2f4050; padding:5px 0;">
+        <span>${data.category}</span> <span>${data.amount} টাকা</span> <span>${date}</span>
+      </div>`;
+    });
+    document.getElementById('incomeTableBody').innerHTML = rows || '<tr><td colspan="4">কোন আয় নেই</td></tr>';
+    document.getElementById('incomeDetails').innerHTML = detailsHtml || '<p>কোন আয় নেই</p>';
+    document.getElementById('totalIncome').innerText = total + ' টাকা';
+    updateChartAndBalance();
+  }
+
+  window.addIncome = async () => {
+    if (currentUserRole !== 'admin') return;
+    const amount = Number(document.getElementById('incomeAmount').value);
+    const category = document.getElementById('incomeCategorySelect').value;
+    const date = document.getElementById('incomeDate').value;
+    if (!amount) return alert('পরিমাণ দিন');
+    if (!category) return alert('ক্যাটাগরি নির্বাচন করুন');
+    const id = document.getElementById('editingIncomeId').value;
+    const data = { category, amount, date: date ? new Date(date) : new Date() };
+    if (id) {
+      await setDoc(doc(db, 'income', id), data);
+      document.getElementById('editingIncomeId').value = '';
+      document.getElementById('incomeSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> আয় যোগ';
+      document.getElementById('cancelIncomeBtn').style.display = 'none';
+    } else {
+      await addDoc(collection(db, 'income'), data);
+    }
+    document.getElementById('incomeAmount').value = '';
+    document.getElementById('incomeDate').value = '';
+    loadIncomeDetails();
+  };
+
+  window.editIncome = (id) => {
+    if (currentUserRole !== 'admin') return;
+    getDoc(doc(db, 'income', id)).then(docSnap => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById('incomeCategorySelect').value = data.category;
+        document.getElementById('incomeAmount').value = data.amount;
+        if (data.date) {
+          const d = new Date(data.date.seconds*1000).toISOString().split('T')[0];
+          document.getElementById('incomeDate').value = d;
+        }
+        document.getElementById('editingIncomeId').value = id;
+        document.getElementById('incomeSubmitBtn').innerHTML = '<i class="fas fa-edit"></i> আয় আপডেট';
+        document.getElementById('cancelIncomeBtn').style.display = 'inline-block';
+      }
+    });
+  };
+
+  window.deleteIncome = async (id) => {
+    if (currentUserRole !== 'admin') return;
+    if (confirm('নিশ্চিতভাবে মুছে ফেলতে চান?')) {
+      await deleteDoc(doc(db, 'income', id));
+      loadIncomeDetails();
+    }
+  };
+
+  window.cancelIncomeEdit = () => {
+    document.getElementById('editingIncomeId').value = '';
+    document.getElementById('incomeAmount').value = '';
+    document.getElementById('incomeDate').value = '';
+    document.getElementById('incomeSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> আয় যোগ';
+    document.getElementById('cancelIncomeBtn').style.display = 'none';
+  };
+
+  // ---------- ব্যয় ----------
+  async function loadExpenseDetails() {
+    const snap = await getDocs(collection(db, 'expense'));
+    let total = 0;
+    let rows = '';
+    let detailsHtml = '';
+    snap.docs.forEach(d => {
+      const data = d.data();
+      total += data.amount || 0;
+      const actionButtons = currentUserRole === 'admin'
+        ? `<button class="action-btn" onclick="editExpense('${d.id}')"><i class="fas fa-edit"></i></button>
+           <button class="action-btn delete-btn" onclick="deleteExpense('${d.id}')"><i class="fas fa-trash"></i></button>`
+        : '';
+      rows += `<tr>
+        <td>${data.category}</td><td>${data.amount} টাকা</td>
+        <td>${actionButtons}</td>
+      </tr>`;
+      detailsHtml += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #2f4050; padding:5px 0;">
+        <span>${data.category}</span> <span>${data.amount} টাকা</span>
+      </div>`;
+    });
+    document.getElementById('expenseTableBody').innerHTML = rows || '<tr><td colspan="3">কোন ব্যয় নেই</td></tr>';
+    document.getElementById('expenseDetails').innerHTML = detailsHtml || '<p>কোন ব্যয় নেই</p>';
+    document.getElementById('totalExpense').innerText = total + ' টাকা';
+    updateChartAndBalance();
+  }
+
+  window.addExpense = async () => {
+    if (currentUserRole !== 'admin') return;
+    const amount = Number(document.getElementById('expenseAmount').value);
+    const category = document.getElementById('expenseCategorySelect').value;
+    if (!amount) return alert('পরিমাণ দিন');
+    if (!category) return alert('ক্যাটাগরি নির্বাচন করুন');
+    const id = document.getElementById('editingExpenseId').value;
+    const data = { category, amount, date: new Date() };
+    if (id) {
+      await setDoc(doc(db, 'expense', id), data);
+      document.getElementById('editingExpenseId').value = '';
+      document.getElementById('expenseSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> ব্যয় যোগ';
+      document.getElementById('cancelExpenseBtn').style.display = 'none';
+    } else {
+      await addDoc(collection(db, 'expense'), data);
+    }
+    document.getElementById('expenseAmount').value = '';
+    loadExpenseDetails();
+  };
+
+  window.editExpense = (id) => {
+    if (currentUserRole !== 'admin') return;
+    getDoc(doc(db, 'expense', id)).then(docSnap => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById('expenseCategorySelect').value = data.category;
+        document.getElementById('expenseAmount').value = data.amount;
+        document.getElementById('editingExpenseId').value = id;
+        document.getElementById('expenseSubmitBtn').innerHTML = '<i class="fas fa-edit"></i> ব্যয় আপডেট';
+        document.getElementById('cancelExpenseBtn').style.display = 'inline-block';
+      }
+    });
+  };
+
+  window.deleteExpense = async (id) => {
+    if (currentUserRole !== 'admin') return;
+    if (confirm('নিশ্চিতভাবে মুছে ফেলতে চান?')) {
+      await deleteDoc(doc(db, 'expense', id));
+      loadExpenseDetails();
+    }
+  };
+
+  window.cancelExpenseEdit = () => {
+    document.getElementById('editingExpenseId').value = '';
+    document.getElementById('expenseAmount').value = '';
+    document.getElementById('expenseSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> ব্যয় যোগ';
+    document.getElementById('cancelExpenseBtn').style.display = 'none';
+  };
+
+  // ---------- চার্ট ----------
+  function updateChartAndBalance() {
+    const inc = Number(document.getElementById('totalIncome').innerText.split(' ')[0]) || 0;
+    const exp = Number(document.getElementById('totalExpense').innerText.split(' ')[0]) || 0;
+    document.getElementById('balance').innerText = (inc - exp) + ' টাকা';
+
+    const ctx = document.getElementById('financeChart')?.getContext('2d');
+    if (!ctx) return;
+
+    if (window.financeChart && typeof window.financeChart.destroy === 'function') {
+      window.financeChart.destroy();
+    }
+    window.financeChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['আয়', 'ব্যয়', 'ব্যালেন্স'],
+        datasets: [{
+          data: [inc, exp, inc - exp],
+          backgroundColor: ['#2ecc71', '#e74c3c', '#3498db']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { ticks: { color: '#ccc' }, grid: { color: '#2f4050' } },
+          x: { ticks: { color: '#ccc' } }
+        }
+      }
+    });
+  }
+
+  // ---------- প্রকল্প ও কাজ ----------
+  async function loadWorks() {
+    const snap = await getDocs(collection(db, 'works'));
+    const container = document.getElementById('projectListContainer');
+    if (!container) return;
+
+    if (snap.empty) {
+      container.innerHTML = '<p class="no-data">কোন প্রকল্প নেই</p>';
+      return;
+    }
+
+    let html = '';
+    snap.docs.forEach(d => {
+      const w = d.data();
+      const workId = d.id;
+      const actionButtons = currentUserRole === 'admin'
+        ? `<div class="detail-actions">
+            <button class="action-btn" onclick="editWork('${workId}')"><i class="fas fa-edit"></i> সম্পাদনা</button>
+            <button class="action-btn delete-btn" onclick="deleteWork('${workId}')"><i class="fas fa-trash"></i> মুছুন</button>
+          </div>`
+        : '';
+      html += `
+        <div class="project-item">
+          <button class="project-name-btn" onclick="toggleWorkDetails('${workId}')">
+            <i class="fas fa-folder-open"></i> ${w.name}
+          </button>
+          <div id="details-${workId}" class="project-details">
+            <div class="detail-row">
+              <span class="detail-label">বাজেট</span>
+              <span class="detail-value">${w.budget} টাকা</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">স্ট্যাটাস</span>
+              <span class="detail-value">${w.status === 'ongoing' ? 'চলমান' : w.status === 'upcoming' ? 'আগামী' : 'সম্পন্ন'}</span>
+            </div>
+            ${actionButtons}
+          </div>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+  }
+
+  window.toggleWorkDetails = (workId) => {
+    const detailsDiv = document.getElementById(`details-${workId}`);
+    if (detailsDiv) {
+      detailsDiv.classList.toggle('show');
+    }
+  };
+
+  window.addWork = async () => {
+    if (currentUserRole !== 'admin') return;
+    const name = document.getElementById('workName').value.trim();
+    const budget = Number(document.getElementById('workBudget').value);
+    const status = document.getElementById('workStatus').value;
+    const editingId = document.getElementById('editingWorkId').value;
+    if (!name || !budget) return alert('নাম ও বাজেট দিন');
+    const data = { name, budget, status };
+    if (editingId) {
+      await setDoc(doc(db, 'works', editingId), data, { merge: true });
+      document.getElementById('editingWorkId').value = '';
+      document.getElementById('workSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> কাজ যোগ';
+      document.getElementById('cancelWorkBtn').style.display = 'none';
+    } else {
+      await addDoc(collection(db, 'works'), data);
+    }
+    document.getElementById('workName').value = '';
+    document.getElementById('workBudget').value = '';
+    await loadWorks();
+  };
+
+  window.editWork = (id) => {
+    if (currentUserRole !== 'admin') return;
+    getDoc(doc(db, 'works', id)).then(docSnap => {
+      if (docSnap.exists()) {
+        const w = docSnap.data();
+        document.getElementById('workName').value = w.name;
+        document.getElementById('workBudget').value = w.budget;
+        document.getElementById('workStatus').value = w.status;
+        document.getElementById('editingWorkId').value = id;
+        document.getElementById('workSubmitBtn').innerHTML = '<i class="fas fa-edit"></i> কাজ আপডেট';
+        document.getElementById('cancelWorkBtn').style.display = 'inline-block';
+      }
+    });
+  };
+
+  window.deleteWork = async (id) => {
+    if (currentUserRole !== 'admin') return;
+    if (confirm('নিশ্চিতভাবে মুছে ফেলতে চান?')) {
+      await deleteDoc(doc(db, 'works', id));
+      await loadWorks();
+    }
+  };
+
+  window.cancelWorkEdit = () => {
+    document.getElementById('editingWorkId').value = '';
+    document.getElementById('workName').value = '';
+    document.getElementById('workBudget').value = '';
+    document.getElementById('workSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> কাজ যোগ';
+    document.getElementById('cancelWorkBtn').style.display = 'none';
+  };
+
+  // ---------- সদস্য ----------
+  async function loadAllMembers() {
+    const snap = await getDocs(collection(db, 'members'));
+    allMembers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // ডিফল্ট: কোনো সদস্য দেখাব না
+    memberContainer.innerHTML = '';
+  }
+
+  async function renderMemberCards(membersArray) {
+    if (membersArray.length === 0) {
+      memberContainer.innerHTML = ''; // সম্পূর্ণ ফাঁকা
+      return;
+    }
+    let html = '';
+    for (const m of membersArray) {
+      const paySnap = await getDocs(query(collection(db, 'payments'), where('name', '==', m.name), where('year', '==', m.year)));
+      const paidCount = paySnap.size;
+      const paidAmount = paidCount * m.salary;
+      const yearly = m.salary * 12;
+      const due = yearly - paidAmount;
+      const actionButtons = currentUserRole === 'admin'
+        ? `<span class="card-actions">
+            <button class="action-btn" onclick="editMember('${m.id}')"><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete-btn" onclick="deleteMember('${m.id}')"><i class="fas fa-trash"></i></button>
+          </span>`
+        : '';
+      html += `<div class="member-card" data-id="${m.id}">
+        <h4>
+          <i class="fas fa-user"></i> ${m.name}
+          ${actionButtons}
+        </h4>
+        <p><i class="fas fa-calendar"></i> সাল: ${m.year}</p>
+        <p><i class="fas fa-coins"></i> মাসিক: ${m.salary} টাকা</p>
+        <p><i class="fas fa-check-circle" style="color:#6f9e6f;"></i> জমা: ${paidAmount} টাকা (${paidCount} মাস)</p>
+        <p class="due-highlight"><i class="fas fa-exclamation-triangle"></i> বাকি: ${due} টাকা (${12-paidCount} মাস)</p>
+      </div>`;
+    }
+    memberContainer.innerHTML = html;
+  }
+
+  // অটোসাজেশন
+  window.handleSearchInput = () => {
+    const input = searchInput.value.trim().toLowerCase();
+    if (input === '') {
+      autocompleteDropdown.style.display = 'none';
+      memberContainer.innerHTML = ''; // ইনপুট খালি করলে সাথে সাথে তালিকা লুকাও
+      return;
+    }
+    // অটোসাজেশন আপডেট কর
+    const matches = allMembers
+      .map(m => m.name)
+      .filter(name => name.toLowerCase().includes(input))
+      .slice(0, 10);
+    if (matches.length > 0) {
+      let dropdownHtml = '';
+      matches.forEach(name => {
+        dropdownHtml += `<div class="autocomplete-item" onmousedown="selectAutocomplete('${name}')">${name}</div>`;
+      });
+      autocompleteDropdown.innerHTML = dropdownHtml;
+      autocompleteDropdown.style.display = 'block';
+    } else {
+      autocompleteDropdown.style.display = 'none';
+    }
+  };
+
+  window.selectAutocomplete = (name) => {
+    searchInput.value = name;
+    autocompleteDropdown.style.display = 'none';
+    filterMembers(); // শুধু ঐ সদস্য দেখাও
+  };
+
+  window.hideAutocomplete = () => {
+    setTimeout(() => {
+      autocompleteDropdown.style.display = 'none';
+    }, 200);
+  };
+
+  // ফিল্টার ফাংশন: ইনপুট খালি থাকলে কিছু দেখায় না, অন্যথায় মিলিয়ে দেখায়
+  window.filterMembers = () => {
+    const text = searchInput.value.trim().toLowerCase();
+    if (text === '') {
+      // ইনপুট খালি -> কিছু দেখাব না
+      memberContainer.innerHTML = '';
+    } else {
+      const filtered = allMembers.filter(m => m.name.toLowerCase().includes(text));
+      renderMemberCards(filtered);
+    }
+    autocompleteDropdown.style.display = 'none';
+  };
+
+  window.addOrUpdateMember = async () => {
+    if (currentUserRole !== 'admin') return;
+    const name = document.getElementById('memberName').value.trim();
+    const year = Number(document.getElementById('memberYear').value);
+    const salary = Number(document.getElementById('memberSalary').value);
+    const month = document.getElementById('payMonth').value.trim();
+    const editingId = document.getElementById('editingMemberId').value;
+
+    if (!name || !year || !salary) return alert('নাম, সাল ও বেতন দিন');
+
+    if (editingId) {
+      await setDoc(doc(db, 'members', editingId), { name, year, salary }, { merge: true });
+      document.getElementById('editingMemberId').value = '';
+      document.getElementById('memberSubmitBtn').innerHTML = '<i class="fas fa-save"></i> সংরক্ষণ / জমা';
+      document.getElementById('cancelMemberBtn').style.display = 'none';
+    } else {
+      const q = query(collection(db, 'members'), where('name', '==', name), where('year', '==', year));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        await addDoc(collection(db, 'members'), { name, year, salary });
+      } else {
+        await setDoc(snap.docs[0].ref, { name, year, salary }, { merge: true });
+      }
+    }
+
+    if (month && !editingId) {
+      await addDoc(collection(db, 'payments'), { name, year, month, salary, date: new Date() });
+    }
+
+    document.getElementById('memberName').value = '';
+    document.getElementById('memberYear').value = '';
+    document.getElementById('memberSalary').value = '';
+    document.getElementById('payMonth').value = '';
+    loadAllMembers();
+  };
+
+  window.editMember = (id) => {
+    if (currentUserRole !== 'admin') return;
+    const member = allMembers.find(m => m.id === id);
+    if (member) {
+      document.getElementById('memberName').value = member.name;
+      document.getElementById('memberYear').value = member.year;
+      document.getElementById('memberSalary').value = member.salary;
+      document.getElementById('editingMemberId').value = id;
+      document.getElementById('memberSubmitBtn').innerHTML = '<i class="fas fa-edit"></i> সদস্য আপডেট';
+      document.getElementById('cancelMemberBtn').style.display = 'inline-block';
+    }
+  };
+
+  window.deleteMember = async (id) => {
+    if (currentUserRole !== 'admin') return;
+    if (confirm('সদস্য মুছে ফেলতে চান? (সম্পর্কিত পেমেন্ট থাকলে সেগুলোও মুছে যাবে)')) {
+      const member = allMembers.find(m => m.id === id);
+      if (member) {
+        const paymentsSnap = await getDocs(query(collection(db, 'payments'), where('name', '==', member.name), where('year', '==', member.year)));
+        paymentsSnap.forEach(async (p) => { await deleteDoc(p.ref); });
+      }
+      await deleteDoc(doc(db, 'members', id));
+      loadAllMembers();
+    }
+  };
+
+  window.cancelMemberEdit = () => {
+    document.getElementById('editingMemberId').value = '';
+    document.getElementById('memberName').value = '';
+    document.getElementById('memberYear').value = '';
+    document.getElementById('memberSalary').value = '';
+    document.getElementById('payMonth').value = '';
+    document.getElementById('memberSubmitBtn').innerHTML = '<i class="fas fa-save"></i> সংরক্ষণ / জমা';
+    document.getElementById('cancelMemberBtn').style.display = 'none';
+  };
+
+  // টগল ডিটেলস
+  window.toggleIncomeDetails = () => {
+    const el = document.getElementById('incomeDetails');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  };
+  window.toggleExpenseDetails = () => {
+    const el = document.getElementById('expenseDetails');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  };
+
+  // স্লাইডার
+  let slideIndex = 0;
+  function showSlides() {
+    const slides = document.getElementsByClassName('slide-img');
+    for (let i = 0; i < slides.length; i++) slides[i].classList.remove('active-slide');
+    slideIndex++; if (slideIndex > slides.length) slideIndex = 1;
+    slides[slideIndex-1]?.classList.add('active-slide');
+    setTimeout(showSlides, 4000);
+  }
+  setTimeout(showSlides, 500);
+</script>
+</body>
+</html>
