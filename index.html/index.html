@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -21,7 +20,7 @@
     }
   </script>
   <style>
-    /* ----- প্রিমিয়াম রেস্পন্সিভ স্টাইল ----- */
+    /* ----- প্রিমিয়াম রেস্পন্সিভ স্টাইল (অপরিবর্তিত) ----- */
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Noto Sans Bengali',sans-serif; font-size:18px; line-height:1.6; min-height:100vh; background-color:#0a0f1a; }
     .login-bg { position:fixed; top:0; left:0; width:100%; height:100%; background:url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat; filter:brightness(0.4) saturate(1.3); z-index:-2; }
@@ -338,43 +337,20 @@
               <th>বিভাগ</th>
               <th>পরিমাণ</th>
               <th>তারিখ</th>
-              <th>মাস/বছর</th>
+              <th>সাল</th>
               <th>অ্যাকশন</th>
               <th>বিস্তারিত</th>
             </tr>
           </thead>
           <tbody id="incomeTableBody"></tbody>
         </table>
-        <!-- অ্যাডমিন-শুধু ফর্ম (আপডেটেড) -->
+        <!-- অ্যাডমিন-শুধু ফর্ম (সাল ইনপুট সহ, মাস/বার্ষিক ড্রপ ডাউন বাদ) -->
         <div id="adminIncomeForm" class="admin-only" style="display: none;">
           <hr style="margin:20px0; border-color:#2f4050;">
           <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-pen"></i> আয় যোগ / সংশোধন</div>
           <select id="incomeCategorySelect"></select>
-          <select id="incomePeriodType">
-            <option value="বার্ষিক">বার্ষিক আয়</option>
-            <option value="মাসিক">মাসিক আয়</option>
-          </select>
-          <select id="incomeYearSelect">
-            <option value="2026">২০২৬</option>
-            <option value="2027">২০২৭</option>
-            <option value="2028">২০২৮</option>
-            <option value="2029">২০২৯</option>
-            <option value="2030">২০৩০</option>
-          </select>
-          <select id="incomeMonthSelect" style="display:none;">
-            <option value="জানুয়ারি">জানুয়ারি</option>
-            <option value="ফেব্রুয়ারি">ফেব্রুয়ারি</option>
-            <option value="মার্চ">মার্চ</option>
-            <option value="এপ্রিল">এপ্রিল</option>
-            <option value="মে">মে</option>
-            <option value="জুন">জুন</option>
-            <option value="জুলাই">জুলাই</option>
-            <option value="আগস্ট">আগস্ট</option>
-            <option value="সেপ্টেম্বর">সেপ্টেম্বর</option>
-            <option value="অক্টোবর">অক্টোবর</option>
-            <option value="নভেম্বর">নভেম্বর</option>
-            <option value="ডিসেম্বর">ডিসেম্বর</option>
-          </select>
+          <!-- নতুন সাল ইনপুট (শুধু অ্যাডমিন দেখবে) -->
+          <input type="number" id="incomeYear" placeholder="সাল (যেমন ২০২৬)" min="2000" max="2100">
           <input type="number" id="incomeAmount" placeholder="টাকা">
           <input type="date" id="incomeDate">
           <input type="hidden" id="editingIncomeId" value="">
@@ -383,7 +359,7 @@
         </div>
       </div>
 
-      <!-- ব্যয়ের তালিকা ও ফর্ম (বিস্তারিত বাটন সহ) - তারিখ যোগ করা হয়েছে -->
+      <!-- ব্যয়ের তালিকা ও ফর্ম (বিস্তারিত বাটন সহ) - তারিখ ও সাল যোগ করা হয়েছে -->
       <div class="card">
         <div class="section-title">
           <i class="fas fa-circle-minus" style="color:#f9a8a8;"></i> ব্যয়ের তালিকা
@@ -395,17 +371,19 @@
               <th>বিভাগ</th>
               <th>পরিমাণ</th>
               <th>তারিখ</th>
+              <th>সাল</th>
               <th>অ্যাকশন</th>
               <th>বিস্তারিত</th>
             </tr>
           </thead>
           <tbody id="expenseTableBody"></tbody>
         </table>
-        <!-- অ্যাডমিন-শুধু ফর্ম (আপডেটেড) -->
+        <!-- অ্যাডমিন-শুধু ফর্ম (সাল ইনপুট সহ) -->
         <div id="adminExpenseForm" class="admin-only" style="display: none;">
           <hr style="margin:20px0; border-color:#2f4050;">
           <div style="font-weight:700; margin-bottom:15px; font-size:1.3rem;"><i class="fas fa-pen"></i> ব্যয় যোগ / সংশোধন</div>
           <select id="expenseCategorySelect"></select>
+          <input type="number" id="expenseYear" placeholder="সাল (যেমন ২০২৬)" min="2000" max="2100">
           <input type="number" id="expenseAmount" placeholder="টাকা">
           <input type="date" id="expenseDate">
           <input type="hidden" id="editingExpenseId" value="">
@@ -432,7 +410,6 @@
             <option value="upcoming">আগামী</option>
             <option value="completed">সম্পন্ন</option>
           </select>
-          <!-- নতুন ফিল্ড: অতিরিক্ত টাকার পরিমাণ -->
           <input id="workExtraAmount" type="number" placeholder="অতিরিক্ত টাকা লাগবে (টাকা)">
           <input type="hidden" id="editingWorkId" value="">
           <button onclick="addWork()" id="workSubmitBtn"><i class="fas fa-plus"></i> কাজ যোগ</button>
@@ -537,16 +514,6 @@
   window.toggleExpenseCategoryGrid = () => document.getElementById('expenseCategoryGrid').classList.toggle('hidden');
   window.toggleTable = (tableId) => document.getElementById(tableId)?.classList.toggle('hidden');
   window.toggleProjectList = () => document.getElementById('projectListContainer')?.classList.toggle('hidden');
-
-  // ---------- মাস নির্বাচনের টগল ----------
-  document.getElementById('incomePeriodType')?.addEventListener('change', function() {
-    const monthSelect = document.getElementById('incomeMonthSelect');
-    if (this.value === 'মাসিক') {
-      monthSelect.style.display = 'block';
-    } else {
-      monthSelect.style.display = 'none';
-    }
-  });
 
   // ---------- লগইন/লগআউট ----------
   function showLoginOnly() {
@@ -765,7 +732,7 @@
       const data = d.data();
       total += data.amount || 0;
       const date = data.date ? new Date(data.date.seconds*1000).toLocaleDateString('bn') : '';
-      const periodInfo = data.periodType === 'মাসিক' ? `${data.month || ''} ${data.year || ''}` : (data.year || '');
+      const year = data.year || '-';  // সাল প্রদর্শন
       const actionButtons = currentUserRole === 'admin' 
         ? `<button class="action-btn" onclick="editIncome('${d.id}')"><i class="fas fa-edit"></i></button>
            <button class="action-btn delete-btn" onclick="deleteIncome('${d.id}')"><i class="fas fa-trash"></i></button>`
@@ -773,7 +740,7 @@
       const detailButton = `<button class="action-btn" onclick="openIncomeDetailModal('${d.id}', '${data.category}')"><i class="fas fa-list"></i></button>`;
       rows += `<tr>
         <td>${data.category}</td><td>${data.amount} টাকা</td><td>${date}</td>
-        <td>${periodInfo}</td>
+        <td>${year}</td>
         <td>${actionButtons}</td>
         <td>${detailButton}</td>
       </tr>`;
@@ -792,23 +759,17 @@
     const amount = Number(document.getElementById('incomeAmount').value);
     const category = document.getElementById('incomeCategorySelect').value;
     const date = document.getElementById('incomeDate').value;
-    const periodType = document.getElementById('incomePeriodType').value;
-    const year = document.getElementById('incomeYearSelect').value;
-    const month = periodType === 'মাসিক' ? document.getElementById('incomeMonthSelect').value : null;
-    
+    const year = document.getElementById('incomeYear').value;
     if (!amount) return alert('পরিমাণ দিন');
     if (!category) return alert('ক্যাটাগরি নির্বাচন করুন');
-    
+    // year বাধ্যতামূলক না, তবে রাখতে পারি
     const id = document.getElementById('editingIncomeId').value;
     const data = { 
       category, 
       amount, 
       date: date ? new Date(date) : new Date(),
-      periodType,
-      year,
-      month
+      year: year || null
     };
-    
     if (id) {
       await setDoc(doc(db, 'income', id), data);
       document.getElementById('editingIncomeId').value = '';
@@ -819,6 +780,7 @@
     }
     document.getElementById('incomeAmount').value = '';
     document.getElementById('incomeDate').value = '';
+    document.getElementById('incomeYear').value = '';
     loadIncomeDetails();
   };
 
@@ -833,14 +795,7 @@
           const d = new Date(data.date.seconds*1000).toISOString().split('T')[0];
           document.getElementById('incomeDate').value = d;
         }
-        document.getElementById('incomePeriodType').value = data.periodType || 'বার্ষিক';
-        document.getElementById('incomeYearSelect').value = data.year || '2026';
-        if (data.month) {
-          document.getElementById('incomeMonthSelect').value = data.month;
-          document.getElementById('incomeMonthSelect').style.display = 'block';
-        } else {
-          document.getElementById('incomeMonthSelect').style.display = 'none';
-        }
+        document.getElementById('incomeYear').value = data.year || '';
         document.getElementById('editingIncomeId').value = id;
         document.getElementById('incomeSubmitBtn').innerHTML = '<i class="fas fa-edit"></i> আয় আপডেট';
         document.getElementById('cancelIncomeBtn').style.display = 'inline-block';
@@ -864,9 +819,7 @@
     document.getElementById('editingIncomeId').value = '';
     document.getElementById('incomeAmount').value = '';
     document.getElementById('incomeDate').value = '';
-    document.getElementById('incomePeriodType').value = 'বার্ষিক';
-    document.getElementById('incomeYearSelect').value = '2026';
-    document.getElementById('incomeMonthSelect').style.display = 'none';
+    document.getElementById('incomeYear').value = '';
     document.getElementById('incomeSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> আয় যোগ';
     document.getElementById('cancelIncomeBtn').style.display = 'none';
   };
@@ -881,6 +834,7 @@
       const data = d.data();
       total += data.amount || 0;
       const date = data.date ? new Date(data.date.seconds*1000).toLocaleDateString('bn') : '';
+      const year = data.year || '-';
       const actionButtons = currentUserRole === 'admin'
         ? `<button class="action-btn" onclick="editExpense('${d.id}')"><i class="fas fa-edit"></i></button>
            <button class="action-btn delete-btn" onclick="deleteExpense('${d.id}')"><i class="fas fa-trash"></i></button>`
@@ -888,6 +842,7 @@
       const detailButton = `<button class="action-btn" onclick="openExpenseDetailModal('${d.id}', '${data.category}')"><i class="fas fa-list"></i></button>`;
       rows += `<tr>
         <td>${data.category}</td><td>${data.amount} টাকা</td><td>${date}</td>
+        <td>${year}</td>
         <td>${actionButtons}</td>
         <td>${detailButton}</td>
       </tr>`;
@@ -895,7 +850,7 @@
         <span>${data.category}</span> <span>${data.amount} টাকা</span>
       </div>`;
     }
-    document.getElementById('expenseTableBody').innerHTML = rows || '<tr><td colspan="5">কোন ব্যয় নেই</td></tr>';
+    document.getElementById('expenseTableBody').innerHTML = rows || '<tr><td colspan="6">কোন ব্যয় নেই</td></tr>';
     document.getElementById('expenseDetails').innerHTML = detailsHtml || '<p>কোন ব্যয় নেই</p>';
     document.getElementById('totalExpense').innerText = total + ' টাকা';
     updateChartAndBalance();
@@ -906,10 +861,16 @@
     const amount = Number(document.getElementById('expenseAmount').value);
     const category = document.getElementById('expenseCategorySelect').value;
     const date = document.getElementById('expenseDate').value;
+    const year = document.getElementById('expenseYear').value;
     if (!amount) return alert('পরিমাণ দিন');
     if (!category) return alert('ক্যাটাগরি নির্বাচন করুন');
     const id = document.getElementById('editingExpenseId').value;
-    const data = { category, amount, date: date ? new Date(date) : new Date() };
+    const data = { 
+      category, 
+      amount, 
+      date: date ? new Date(date) : new Date(),
+      year: year || null
+    };
     if (id) {
       await setDoc(doc(db, 'expense', id), data);
       document.getElementById('editingExpenseId').value = '';
@@ -920,6 +881,7 @@
     }
     document.getElementById('expenseAmount').value = '';
     document.getElementById('expenseDate').value = '';
+    document.getElementById('expenseYear').value = '';
     loadExpenseDetails();
   };
 
@@ -934,6 +896,7 @@
           const d = new Date(data.date.seconds*1000).toISOString().split('T')[0];
           document.getElementById('expenseDate').value = d;
         }
+        document.getElementById('expenseYear').value = data.year || '';
         document.getElementById('editingExpenseId').value = id;
         document.getElementById('expenseSubmitBtn').innerHTML = '<i class="fas fa-edit"></i> ব্যয় আপডেট';
         document.getElementById('cancelExpenseBtn').style.display = 'inline-block';
@@ -957,6 +920,7 @@
     document.getElementById('editingExpenseId').value = '';
     document.getElementById('expenseAmount').value = '';
     document.getElementById('expenseDate').value = '';
+    document.getElementById('expenseYear').value = '';
     document.getElementById('expenseSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> ব্যয় যোগ';
     document.getElementById('cancelExpenseBtn').style.display = 'none';
   };
@@ -1018,7 +982,7 @@
       
       const extraFundChecked = w.extraFundRequired ? 'checked' : '';
       const toggleDisabled = currentUserRole !== 'admin' ? 'disabled' : '';
-      const extraAmount = w.extraFundAmount || 0;
+      const extraAmount = w.extraFundAmount ? w.extraFundAmount : 0;
 
       html += `
         <div class="project-item">
@@ -1437,4 +1401,3 @@
 </script>
 </body>
 </html>
-```
